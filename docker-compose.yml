@@ -1,0 +1,51 @@
+version: '3.7'
+services:
+  ignite-node1:
+    image: gridgain/community:8.7.12
+    container_name: ignite-node1
+    volumes:
+      - ./config:/config
+    command: >
+      /opt/gridgain/bin/ignite.sh /config/config.xml
+    networks:
+      ignite-net:
+        aliases:
+          - ignite-node1
+
+  ignite-node2:
+    image: gridgain/community:8.7.12
+    container_name: ignite-node2
+    volumes:
+      - ./config:/config
+    command: >
+      /opt/gridgain/bin/ignite.sh /config/config.xml
+    networks:
+      ignite-net:
+        aliases:
+          - ignite-node2
+
+  ignite-node3:
+    image: gridgain/community:8.7.12
+    container_name: ignite-node3
+    volumes:
+      - ./config:/config
+    command: >
+      /opt/gridgain/bin/ignite.sh /config/config.xml
+    networks:
+      ignite-net:
+        aliases:
+          - ignite-node3
+
+  ignite-web-console:
+    image: gridgain/community:8.7.12
+    container_name: ignite-web-console
+    ports:
+      - "8080:8080"
+    networks:
+      ignite-net:
+        aliases:
+          - ignite-web-console
+
+networks:
+  ignite-net:
+    driver: bridge

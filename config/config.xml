@@ -1,0 +1,59 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+    <!-- Ignite configuration -->
+    <bean id="ignite.cfg" class="org.apache.ignite.configuration.IgniteConfiguration">
+
+<!--        &lt;!&ndash; Cluster name &ndash;&gt;-->
+        <property name="igniteInstanceName" value="ignite-cluster"/>
+
+<!--        &lt;!&ndash; Set to true to enable Apache Ignite Persistence. &ndash;&gt;-->
+<!--        <property name="dataStorageConfiguration">-->
+<!--            <bean class="org.apache.ignite.configuration.DataStorageConfiguration">-->
+<!--                <property name="defaultDataRegionConfiguration">-->
+<!--                    <bean class="org.apache.ignite.configuration.DataRegionConfiguration">-->
+<!--                        <property name="persistenceEnabled" value="true"/>-->
+<!--                    </bean>-->
+<!--                </property>-->
+<!--            </bean>-->
+<!--        </property>-->
+
+        <!-- Discovery SPI -->
+        <property name="discoverySpi">
+            <bean class="org.apache.ignite.spi.discovery.tcp.TcpDiscoverySpi">
+                <property name="ipFinder">
+                    <bean class="org.apache.ignite.spi.discovery.tcp.ipfinder.multicast.TcpDiscoveryMulticastIpFinder">
+                        <property name="addresses">
+                            <list>
+                                <value>ignite-node1:47500..47509</value>
+                                <value>ignite-node2:47500..47509</value>
+                                <value>ignite-node3:47500..47509</value>
+                            </list>
+                        </property>
+                    </bean>
+                </property>
+            </bean>
+        </property>
+<!--        <property name="cacheConfiguration">-->
+<!--            <bean class="org.apache.ignite.configuration.CacheConfiguration">-->
+<!--                <property name="name" value="myCache"/>-->
+<!--                <property name="cacheMode" value="PARTITIONED"/>-->
+<!--                <property name="backups" value="2"/>-->
+<!--                <property name="rebalanceMode" value="ASYNC"/>-->
+<!--                <property name="writeSynchronizationMode" value="FULL_SYNC"/>-->
+<!--                <property name="partitionLossPolicy" value="READ_ONLY_SAFE"/>-->
+<!--&lt;!&ndash;                <property name="atomicityMode" value="TRANSACTIONAL"/>&ndash;&gt;-->
+<!--                &lt;!&ndash; Other parameters &ndash;&gt;-->
+<!--            </bean>-->
+<!--        </property>-->
+        <!-- Network configuration -->
+        <property name="localHost" value="0.0.0.0"/>
+
+        <!-- Enable metrics -->
+        <property name="metricsLogFrequency" value="60000"/>
+
+    </bean>
+</beans>
