@@ -36,16 +36,6 @@ services:
         aliases:
           - ignite-node3
 
-  ignite-web-console:
-    image: gridgain/community:8.7.12
-    container_name: ignite-web-console
-    ports:
-      - "8080:8080"
-    networks:
-      ignite-net:
-        aliases:
-          - ignite-web-console
-
 networks:
   ignite-net:
     driver: bridge

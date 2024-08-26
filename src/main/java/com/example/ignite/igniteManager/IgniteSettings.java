@@ -13,6 +13,7 @@ import org.apache.ignite.spi.discovery.tcp.TcpDiscoverySpi;
 import org.apache.ignite.spi.discovery.tcp.ipfinder.multicast.TcpDiscoveryMulticastIpFinder;
 import org.apache.ignite.spi.discovery.tcp.ipfinder.vm.TcpDiscoveryVmIpFinder;
 
+import java.util.Arrays;
 import java.util.Collections;
 
 public class IgniteSettings {
@@ -38,16 +39,6 @@ public class IgniteSettings {
     private void initConfig() {
         try {
             igniteConfig = getIgniteConfiguration();
-
-//            CacheConfiguration<String, String> cacheCfg = new CacheConfiguration<>();
-//            cacheCfg.setName("myCache");
-//            cacheCfg.setCacheMode(CacheMode.PARTITIONED);
-//            cacheCfg.setBackups(2);
-//            cacheCfg.setRebalanceMode(CacheRebalanceMode.ASYNC);
-//            cacheCfg.setWriteSynchronizationMode(CacheWriteSynchronizationMode.FULL_SYNC);
-//            cacheCfg.setPartitionLossPolicy(PartitionLossPolicy.READ_ONLY_SAFE);
-
-//            igniteConfig.setCacheConfiguration(cacheCfg);
             Ignite ignite = Ignition.start(igniteConfig);
             ignite.cluster().active(true); // Activate the cluster
             System.out.println("Cluster is active: " + ignite.cluster().active());
@@ -77,18 +68,20 @@ public class IgniteSettings {
 
     public IgniteConfiguration getIgniteConfiguration() {
         IgniteConfiguration cfg = new IgniteConfiguration();
-        cfg.setIgniteInstanceName("ignite-cluster");
-        cfg.setFailureHandler(new StopNodeOrHaltFailureHandler(false, 0));
 
+        // Set the discovery SPI and other configurations as needed
         TcpDiscoverySpi spi = new TcpDiscoverySpi();
-
         TcpDiscoveryMulticastIpFinder ipFinder = new TcpDiscoveryMulticastIpFinder();
-        ipFinder.setAddresses(Collections.singletonList("127.0.0.1:47500")); // Use a specific port
-
+        ipFinder.setAddresses(Arrays.asList("ignite-node1:47510", "ignite-node2:47520", "ignite-node3:47530"));
         spi.setIpFinder(ipFinder);
         cfg.setDiscoverySpi(spi);
-        cfg.setClientMode(false); // Make sure this node is a server node
+
+        // Set the work directory, if necessary
+        cfg.setWorkDirectory("/config/work");
+
+        cfg.setClientMode(true); // or false, depending on your node type
 
         return cfg;
     }
+
 }
